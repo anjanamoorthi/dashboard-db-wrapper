@@ -1,3 +1,9 @@
+/**
+ * @author Moorthi Rajan
+ * @version 0.0.1
+ * @since 03/10/2020
+ */
+
 package com.invenco.dashboardAPIHandler.DBWrapper;
 
 import org.springframework.boot.SpringApplication;
@@ -23,24 +29,24 @@ import java.util.Properties;
 @EnableAutoConfiguration
 public class DbWrapperApplication extends SpringBootServletInitializer {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DbWrapperApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DbWrapperApplication.class, args);
+    }
 
 
-	@Bean
-	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.any())
-				.paths(PathSelectors.any())
-				.build()
-				.apiInfo(apiInfo());
-	}
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build()
+                .apiInfo(apiInfo());
+    }
 
-	ApiInfo apiInfo () {
-		// version from version.properties
-		String version = "2.0";
+    ApiInfo apiInfo() {
+        // version from version.properties
+        String version = "2.0";
 		/*try {
 			InputStream stream = ClassLoader.getSystemResourceAsStream("version.properties");
 			Properties p = new Properties();
@@ -50,9 +56,9 @@ public class DbWrapperApplication extends SpringBootServletInitializer {
 			// do nothing
 		} */
 
-		return new ApiInfoBuilder().title("DB-Wrapper for Dashboard")
-				.version(version)
-				.build();
-	}
+        return new ApiInfoBuilder().title("DB-Wrapper for Dashboard")
+                .version(version)
+                .build();
+    }
 
 }
