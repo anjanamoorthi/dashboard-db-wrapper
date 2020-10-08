@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 
-
 @Entity
 @Table ( name = "invreleasebundledata")
 @Data
@@ -25,9 +24,11 @@ public class Release {
     @Column(name = "releasename")
     public String releasename;
 
+    @Transient
     @Column(name = "description")
     public String description;
 
+    @Transient
     @Column(name = "iteration")
     public int iteration;
 
@@ -40,6 +41,15 @@ public class Release {
     @Column(name = "status")
     public String status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "release_status_id")
+    private ReleaseStatus releaseStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productname_id")
+    private Product productName;
+
+    @Transient
     @Column(name = "user")
     public String user;
 

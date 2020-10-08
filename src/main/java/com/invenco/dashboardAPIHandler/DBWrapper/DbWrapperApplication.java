@@ -6,12 +6,18 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper;
 
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Importance;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Product;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.ReleaseStatus;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ProductRepository;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ReleaseStatusRepository;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestImpRepository;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -19,10 +25,6 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 @SpringBootApplication
 @EnableSwagger2WebMvc
@@ -59,6 +61,38 @@ public class DbWrapperApplication extends SpringBootServletInitializer {
         return new ApiInfoBuilder().title("DB-Wrapper for Dashboard")
                 .version(version)
                 .build();
+    }
+
+    @Bean
+    public CommandLineRunner ProductData(ProductRepository repo) {
+        return args -> {
+            repo.save(new Product("G6200"));
+            repo.save(new Product("G7100-12inch"));
+            repo.save(new Product("G7100-15inch"));
+            repo.save(new Product("G7100-8inch"));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner ReleaseStatusData(ReleaseStatusRepository repo) {
+        return args -> {
+            repo.save(new ReleaseStatus("INPROGRESS"));
+            repo.save(new ReleaseStatus("COMPLETED"));
+            repo.save(new ReleaseStatus("REJECTED"));
+            repo.save(new ReleaseStatus("ONHOLD"));
+        };
+    }
+
+    @Bean
+    public CommandLineRunner TestImportanceData(TestImpRepository repo) {
+        return args -> {
+            repo.save(new Importance("UNDEFINED"));
+            repo.save(new Importance("FATAL"));
+            repo.save(new Importance("CRITICAL"));
+            repo.save(new Importance("HIGH"));
+            repo.save(new Importance("MEDIUM"));
+            repo.save(new Importance("LOW"));
+        };
     }
 
 }
