@@ -21,7 +21,7 @@ public class ReleaseStatus {
     @Column ( name = "ReleaseStatus")
     public String releaseStatus;
 
-    @OneToMany(mappedBy = "releaseStatus", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "releasestatus", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Release> release;
 
     public ReleaseStatus(String rStatus) {

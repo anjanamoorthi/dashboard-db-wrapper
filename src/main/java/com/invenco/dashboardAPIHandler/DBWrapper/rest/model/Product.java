@@ -22,7 +22,7 @@ public class Product {
     private String productName;
 
     @OneToMany(mappedBy = "productName", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Release> release;
+    private List<Release> product;
 
 
     public Product(String pName) {

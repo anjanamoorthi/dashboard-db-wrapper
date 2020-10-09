@@ -6,6 +6,7 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.service;
 
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Release_DAO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Release;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ReleaseRepository;
 import lombok.Builder;
@@ -33,10 +34,26 @@ public class ReleaseService {
     @Autowired
     private ReleaseRepository repo;
 
-    public ResponseEntity<String> saveReleaseData(Release relData) {
+    @Autowired
+    private ProductService prodService;
+
+    @Autowired
+    private ReleaseStatusService releaseStatusService;
+
+    public Release saveReleaseData(Release_DAO rdata) {
         System.out.println("Saving data into DB");
-        repo.save(relData);
-        return new ResponseEntity<>("Successfully saved", HttpStatus.OK);
+        //Release releaseData = new Release();
+        Release releaseData = new Release();
+        releaseData.setReleasename(rdata.releasename);
+        releaseData.setDescription(rdata.description);
+        releaseData.setIteration(rdata.iteration);
+        releaseData.setStartdate(rdata.startdate);
+        releaseData.setEnddate(rdata.enddate);
+        releaseData.setUser(rdata.user);
+        releaseData.setProductName(prodService.findByName(rdata.pname));
+        releaseData.setReleasestatus(releaseStatusService.findByName(rdata.status));
+        return repo.save(releaseData);
+        //return new ResponseEntity<>("Successfully saved", HttpStatus.OK);
     }
 
     public ResponseEntity<String> deleteReleaseData(Release relData) {

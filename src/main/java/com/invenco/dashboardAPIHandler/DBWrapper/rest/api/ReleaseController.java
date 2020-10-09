@@ -8,13 +8,17 @@ package com.invenco.dashboardAPIHandler.DBWrapper.rest.api;
 
 import com.google.gson.*;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Release;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Release_DAO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ProductService;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ReleaseService;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ReleaseStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.spring.web.json.Json;
 
+import javax.validation.Valid;
 import java.lang.reflect.Type;
 
 
@@ -24,6 +28,12 @@ public class ReleaseController {
 
     @Autowired
     private ReleaseService service;
+
+    @Autowired
+    private ProductService prodService;
+
+    @Autowired
+    private ReleaseStatusService relStatusService;
 
     //Gson gson = new Gson();
 
@@ -40,7 +50,7 @@ public class ReleaseController {
     }
 
 
-    @PostMapping
+   /* @PostMapping
     public ResponseEntity<String> saveReleaseData(@RequestBody String data) {
         // JSONObject jobj = (JSONObject) new JSONParser().parse(data);
         JsonElement jsonElem = new JsonParser().parse(data);
@@ -53,6 +63,19 @@ public class ReleaseController {
             return service.deleteReleaseData(relData);
         }
         return new ResponseEntity<>("Database Manipulation has failed", HttpStatus.BAD_REQUEST);
+    } */
+
+
+    @PostMapping
+    public ResponseEntity<String> saveReleaseData(@Valid @RequestBody Release_DAO releaseData) {
+
+        try {
+            service.saveReleaseData(releaseData);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Database Manipulation has failed", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Successfully saved", HttpStatus.OK);
     }
+
 
 }

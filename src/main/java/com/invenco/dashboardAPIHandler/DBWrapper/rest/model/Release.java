@@ -9,8 +9,11 @@ package com.invenco.dashboardAPIHandler.DBWrapper.rest.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.UUID;
 
 
 @Entity
@@ -21,35 +24,40 @@ import javax.persistence.*;
 public class Release {
 
     @Id
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id = UUID.randomUUID();
+
+    @NotNull
     @Column(name = "releasename")
     public String releasename;
 
-    @Transient
+
     @Column(name = "description")
     public String description;
 
-    @Transient
     @Column(name = "iteration")
+    @ColumnDefault("1")
     public int iteration;
 
+    @NotNull
     @Column(name = "startdate")
     public String startdate;
 
     @Column(name = "enddate")
     public String enddate;
 
-    @Column(name = "status")
-    public String status;
+   // @Column(name = "status")
+    //public String status;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "release_id")
+    private ReleaseStatus releasestatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "release_status_id")
-    private ReleaseStatus releaseStatus;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productname_id")
+    @JoinColumn(name = "product_id")
     private Product productName;
 
-    @Transient
     @Column(name = "user")
     public String user;
 
