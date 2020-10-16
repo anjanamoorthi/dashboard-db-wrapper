@@ -6,10 +6,9 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,26 +17,31 @@ import java.util.UUID;
 
 @Entity
 @Table ( name = "invreleasebundledata")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Release {
 
-    @Id
+    @EmbeddedId
+    private ReleaseKey id;
+
+//    @Id
+    @GeneratedValue(generator = "hibernate-uuid")
+    @GenericGenerator(name="hibernate-uuid", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
-    private UUID id = UUID.randomUUID();
+    private UUID uuid;// = UUID.randomUUID();
 
-    @NotNull
-    @Column(name = "releasename")
-    public String releasename;
-
+//    @NotNull
+//    @Column(name = "releasename")
+//    public String releasename;
 
     @Column(name = "description")
     public String description;
 
-    @Column(name = "iteration")
-    @ColumnDefault("1")
-    public int iteration;
+//    @Column(name = "iteration")
+//    @ColumnDefault("1")
+//    public int iteration;
 
     @NotNull
     @Column(name = "startdate")
@@ -51,11 +55,11 @@ public class Release {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "release_id")
+    @JoinColumn(name = "release_id", referencedColumnName = )
     private ReleaseStatus releasestatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", insertable = false, updatable = false)
     private Product productName;
 
     @Column(name = "user")

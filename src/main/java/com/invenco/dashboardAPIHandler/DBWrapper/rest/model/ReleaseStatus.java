@@ -1,15 +1,15 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table( name = "invreleasestatus")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReleaseStatus {
@@ -21,6 +21,7 @@ public class ReleaseStatus {
     @Column ( name = "ReleaseStatus")
     public String releaseStatus;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "releasestatus", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Release> release;
 

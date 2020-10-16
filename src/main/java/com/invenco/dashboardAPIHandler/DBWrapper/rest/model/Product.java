@@ -1,15 +1,15 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table( name = "invproduct")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product {
@@ -21,6 +21,7 @@ public class Product {
     @Column( name = "ProductName")
     private String productName;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "productName", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Release> product;
 

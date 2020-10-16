@@ -66,32 +66,38 @@ public class DbWrapperApplication extends SpringBootServletInitializer {
     @Bean
     public CommandLineRunner ProductData(ProductRepository repo) {
         return args -> {
-            repo.save(new Product("G6200"));
-            repo.save(new Product("G7100-12inch"));
-            repo.save(new Product("G7100-15inch"));
-            repo.save(new Product("G7100-8inch"));
+            if (repo.findAll().isEmpty()) {
+                repo.save(new Product("G6200"));
+                repo.save(new Product("G7100-12inch"));
+                repo.save(new Product("G7100-15inch"));
+                repo.save(new Product("G7100-8inch"));
+            }
         };
     }
 
     @Bean
     public CommandLineRunner ReleaseStatusData(ReleaseStatusRepository repo) {
         return args -> {
-            repo.save(new ReleaseStatus("INPROGRESS"));
-            repo.save(new ReleaseStatus("COMPLETED"));
-            repo.save(new ReleaseStatus("REJECTED"));
-            repo.save(new ReleaseStatus("ONHOLD"));
+            if (repo.findAll().isEmpty()) {
+                repo.save(new ReleaseStatus("INPROGRESS"));
+                repo.save(new ReleaseStatus("COMPLETED"));
+                repo.save(new ReleaseStatus("REJECTED"));
+                repo.save(new ReleaseStatus("ONHOLD"));
+            }
         };
     }
 
     @Bean
     public CommandLineRunner TestImportanceData(TestImpRepository repo) {
         return args -> {
-            repo.save(new Importance("UNDEFINED"));
-            repo.save(new Importance("FATAL"));
-            repo.save(new Importance("CRITICAL"));
-            repo.save(new Importance("HIGH"));
-            repo.save(new Importance("MEDIUM"));
-            repo.save(new Importance("LOW"));
+            if (repo.findAll().isEmpty()) {
+                repo.save(new Importance("UNDEFINED"));
+                repo.save(new Importance("FATAL"));
+                repo.save(new Importance("CRITICAL"));
+                repo.save(new Importance("HIGH"));
+                repo.save(new Importance("MEDIUM"));
+                repo.save(new Importance("LOW"));
+            }
         };
     }
 
