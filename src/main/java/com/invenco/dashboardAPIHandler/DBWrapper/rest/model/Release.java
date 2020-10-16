@@ -55,7 +55,7 @@ public class Release {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "release_id", referencedColumnName = )
+    @JoinColumn(name = "release_id")
     private ReleaseStatus releasestatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
