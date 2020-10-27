@@ -13,7 +13,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Test_DTO {
 
-    private UUID uuid;
+    private Long id;
     private String name;
     private String module;
     private String importance;

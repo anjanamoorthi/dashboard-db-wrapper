@@ -13,6 +13,7 @@ import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestCase;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestcaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
@@ -25,23 +26,27 @@ public class TestcaseService {
     @Autowired
     private ImportanceService importanceService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public Test_DTO saveTestcaseData(Test_DAO tcData) {
         System.out.println("Saving data into DB");
-        TestCase testcase = new TestCase();
-        testcase.setName(tcData.getName());
-        testcase.setModule(tcData.getModule());
-        testcase.setTestplan(tcData.getTestplan());
-        testcase.setKtf(Boolean.parseBoolean(""+ tcData.getKtf()));
-        testcase.setSkip(Boolean.parseBoolean(""+ tcData.getSkip()));
-        testcase.setRequirement(tcData.getRequirement());
-        testcase.setDuration(tcData.getDuration());
+        TestCase testcase = modelMapper.map(tcData, TestCase.class);
+       // TestCase testcase = new TestCase();
+//        testcase.setName(tcData.getName());
+//        testcase.setModule(tcData.getModule());
+//        testcase.setTestplan(tcData.getTestplan());
+//        testcase.setKtf(Boolean.parseBoolean(""+ tcData.getKtf()));
+//        testcase.setSkip(Boolean.parseBoolean(""+ tcData.getSkip()));
+//        testcase.setRequirement(tcData.getRequirement());
+//        testcase.setDuration(tcData.getDuration());
 
         Importance importance = importanceService.findByName(tcData.getImportance());
         testcase.setImportance(importance);
         testcase = repo.save(testcase);
 
         Test_DTO response = new Test_DTO();
-        response.setUuid(testcase.getUuid());
+        response.setId(testcase.getId());
         return response;
     }
 

@@ -12,6 +12,7 @@ import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.ReleaseStatus;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ProductRepository;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ReleaseStatusRepository;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestImpRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -99,6 +100,11 @@ public class DbWrapperApplication extends SpringBootServletInitializer {
                 repo.save(new Importance("LOW"));
             }
         };
+    }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
     }
 
 }

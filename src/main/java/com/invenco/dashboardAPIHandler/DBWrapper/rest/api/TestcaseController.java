@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,14 +37,8 @@ public class TestcaseController {
         try {
             dto = service.saveTestcaseData(data);
 
-        } catch (ConstraintViolationException ex) {
-            APIError apiError =
-                    new APIError(HttpStatus.BAD_REQUEST, "Constraint Violation");
-            return new ResponseEntity<>(apiError, apiError.getStatus());
         } catch (Exception e) {
-            APIError apiError =
-                    new APIError(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
-            return new ResponseEntity<>(apiError, apiError.getStatus());
+            throw e;
         }
         return new ResponseEntity<>(dto, HttpStatus.OK);
     }
