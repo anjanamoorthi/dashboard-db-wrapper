@@ -1,14 +1,19 @@
-package com.invenco.dashboardAPIHandler.DBWrapper.rest.dao;
+package com.invenco.dashboardAPIHandler.DBWrapper.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Test_DAO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Test_DTO {
 
+    private UUID uuid;
     private String name;
     private String module;
     private String importance;

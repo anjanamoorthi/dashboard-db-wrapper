@@ -6,47 +6,58 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.api;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Testcase;
+import com.invenco.dashboardAPIHandler.DBWrapper.exception.APIError;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Test_DAO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.Test_DTO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.TestcaseService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/testcase")
 public class TestcaseController {
 
+    Logger logger = LogManager.getLogger(TestcaseController.class);
+
     @Autowired
-    private TestcaseService testcaseService;
+    private TestcaseService service;
 
-    Gson gson = new Gson();
+    @PostMapping("/add")
+    public @ResponseBody HttpEntity<Object> saveTestcaseData(@RequestBody Test_DAO data) {
+        Test_DTO dto;
+        try {
+            dto = service.saveTestcaseData(data);
 
-    @PostMapping
-    public @ResponseBody String saveTestcaseData(@RequestBody String data) {
-        // JSONObject jobj = (JSONObject) new JSONParser().parse(data);
-        JsonElement jsonElem = new JsonParser().parse(data);
-        JsonObject jobj = jsonElem.getAsJsonObject();
-        String action = jobj.get("action").getAsString();
-        if (action.equals("add")) {
-            //JSONObject jobj = jsonElem.parse(data);
-            Testcase tcData = gson.fromJson(jobj.get("test").toString(), Testcase.class);
-            return testcaseService.saveTestcaseData(tcData);
+        } catch (ConstraintViolationException ex) {
+            APIError apiError =
+                    new APIError(HttpStatus.BAD_REQUEST, "Constraint Violation");
+            return new ResponseEntity<>(apiError, apiError.getStatus());
+        } catch (Exception e) {
+            APIError apiError =
+                    new APIError(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
+            return new ResponseEntity<>(apiError, apiError.getStatus());
         }
-        return "Failed to Save Testcase specific Details into DB";
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
-    public @ResponseBody String deleteTestCaseData(@RequestBody String data) {
-        JsonElement jsonElem = new JsonParser().parse(data);
-        JsonObject jobj = jsonElem.getAsJsonObject();
-        String action = jobj.get("action").getAsString();
-        if (action.equals("delete")) {
-            Testcase tcData = gson.fromJson(jobj.get("test").toString(), Testcase.class);
-            return testcaseService.deleteTestcaseData(tcData);
+    @DeleteMapping("/delete/{uuid}")
+    public @ResponseBody HttpEntity<String> deleteTestCaseData(@PathVariable UUID uuid) {
+        try {
+            service.deleteTestcaseData(uuid);
+            return new ResponseEntity(uuid, HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Failed to Delete test case entry from DB");
         }
-        return "Failed to Delete test case entry from DB";
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+
 }

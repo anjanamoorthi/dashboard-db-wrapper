@@ -6,9 +6,11 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.repository;
 
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Testcase;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestCase;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TestcaseRepository extends JpaRepository<Testcase, String> {
+import java.util.UUID;
+
+public interface TestcaseRepository extends JpaRepository<TestCase, UUID> {
 
 }
