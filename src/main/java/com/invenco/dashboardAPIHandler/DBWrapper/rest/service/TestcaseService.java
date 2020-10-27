@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -53,6 +54,14 @@ public class TestcaseService {
     public String deleteTestcaseData(UUID uuid) {
         repo.deleteById(uuid);
         return uuid.toString();
+    }
+
+    public List<TestCase> list() {
+        return repo.findAll();
+    }
+
+    public TestCase findByName(String name) {
+        return repo.findByName(name);
     }
 
 }

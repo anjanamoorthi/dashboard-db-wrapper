@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
+
 
 @Service
 @Builder
@@ -63,6 +65,18 @@ public class ReleaseService {
     public ResponseEntity<String> deleteReleaseData(Releases relData) {
         repo.delete(relData);
         return new ResponseEntity<>("Successfully deleted Entry from DB", HttpStatus.OK);
+    }
+
+    public List<Releases> list() {
+        return repo.findAll();
+    }
+
+    public Releases findByValue(String name) {
+        return repo.findByValue(name);
+    }
+
+    public Releases findByNameAndIteration(String release_name, int release_iteration) {
+        return repo.findByNameAndIteration(release_name, release_iteration);
     }
 
 }
