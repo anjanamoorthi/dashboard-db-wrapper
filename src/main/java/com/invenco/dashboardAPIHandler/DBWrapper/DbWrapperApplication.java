@@ -9,9 +9,11 @@ package com.invenco.dashboardAPIHandler.DBWrapper;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Importance;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Product;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.ReleaseStatus;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestStatus;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ProductRepository;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.ReleaseStatusRepository;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestImpRepository;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestStatusRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,40 +30,11 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
 @SpringBootApplication
-@EnableSwagger2WebMvc
 @EnableAutoConfiguration
 public class DbWrapperApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(DbWrapperApplication.class, args);
-    }
-
-
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(apiInfo());
-    }
-
-    ApiInfo apiInfo() {
-        // version from version.properties
-        String version = "2.0";
-		/*try {
-			InputStream stream = ClassLoader.getSystemResourceAsStream("version.properties");
-			Properties p = new Properties();
-			p.load(stream);
-			version = p.getProperty("version");
-		} catch (IOException e) {
-			// do nothing
-		} */
-
-        return new ApiInfoBuilder().title("DB-Wrapper for Dashboard")
-                .version(version)
-                .build();
     }
 
     @Bean
@@ -84,6 +57,19 @@ public class DbWrapperApplication extends SpringBootServletInitializer {
                 repo.save(new ReleaseStatus("COMPLETED"));
                 repo.save(new ReleaseStatus("REJECTED"));
                 repo.save(new ReleaseStatus("ONHOLD"));
+            }
+        };
+    }
+
+    @Bean
+    public CommandLineRunner TestStatusData(TestStatusRepository repo) {
+        return args -> {
+            if (repo.findAll().isEmpty()) {
+                repo.save(new TestStatus("UNKNOWN"));
+                repo.save(new TestStatus("PASS"));
+                repo.save(new TestStatus("FAIL"));
+                repo.save(new TestStatus("SKIP"));
+                repo.save(new TestStatus("KTF"));
             }
         };
     }

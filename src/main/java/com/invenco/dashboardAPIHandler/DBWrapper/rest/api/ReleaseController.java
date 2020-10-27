@@ -1,4 +1,16 @@
 /**
+ * JSON Object for POST Message is as shown below
+ *
+ *  <PRE>
+ *   {
+ *     "name" : "123ABC",
+ *     "iteration" : 2,
+ *     "start_date" : "2020-10-10",
+ *     "end_date" : "2020-10-15",
+ *     "release_status" : "ON_HOLD",
+ *     "product_name":"G7"
+ *        }
+ *   </PRE>
  * @author Moorthi Rajan
  * @version 0.0.1
  * @since 03/10/2020
@@ -8,10 +20,14 @@ package com.invenco.dashboardAPIHandler.DBWrapper.rest.api;
 
 import com.google.gson.*;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Release_DAO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.Release_DTO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ProductService;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ReleaseService;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ReleaseStatusService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +41,8 @@ import java.lang.reflect.Type;
 @RequestMapping("/release")
 public class ReleaseController {
 
+    Logger logger = LogManager.getLogger(ReleaseController.class);
+
     @Autowired
     private ReleaseService service;
 
@@ -34,31 +52,18 @@ public class ReleaseController {
     @Autowired
     private ReleaseStatusService relStatusService;
 
-    //Gson gson = new Gson();
-
-    private final Gson gson = new GsonBuilder()
-            .registerTypeAdapter(Json.class, new SpringfoxJsonToGsonAdapter())
-            .create();
-
-    private static class SpringfoxJsonToGsonAdapter implements JsonSerializer<Json> {
-        @Override
-        public JsonElement serialize(Json json, Type type, JsonSerializationContext context) {
-            final JsonParser parser = new JsonParser();
-            return parser.parse(json.value());
-        }
-    }
-
-
-    @PostMapping
-    public ResponseEntity<String> saveReleaseData(@Valid @RequestBody Release_DAO releaseData) {
-
+    @PostMapping("/add")
+    public @ResponseBody HttpEntity<Object> saveReleaseData(@Valid @RequestBody Release_DAO releaseData) {
+        Release_DTO releaseDto;
         try {
-            service.saveReleaseData(releaseData);
+            releaseDto = service.saveReleaseData(releaseData);
         } catch (Exception e) {
-            return new ResponseEntity<>("Database Manipulation has failed", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid DB Operation", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Successfully saved", HttpStatus.OK);
+        return new ResponseEntity<>(releaseDto, HttpStatus.OK);
     }
+
+
 
 
 }

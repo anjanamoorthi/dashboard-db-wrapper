@@ -5,20 +5,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Release_DAO {
 
-    public String releasename;
-    public String description;
-    public int iteration;
-    public String startdate;
-    public String enddate;
-    public String status;
-    public String pname;
-    public String user;
+    private String name;
+    private int iteration;
+    private String description;
+    private Date start_date;
+    private Date end_date;
+    private String release_status;
+    private String product_name;
 
 
 }

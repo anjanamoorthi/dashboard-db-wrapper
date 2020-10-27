@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class TestCaseService {
 
@@ -49,4 +52,8 @@ public class TestCaseService {
     public TestCase findByName(String testcaseName) {
         return repo.findByName(testcaseName);
     }
+    public List<TestCase> list() {
+        return repo.findAll();
+    }
+
 }
