@@ -25,4 +25,9 @@ public class TestStatus extends BaseEntity {
     @Column(name = "status", unique = true, length = 20)
     @NotNull
     private String status;
+
+    public TestStatus(String test_status) {
+        this.status = test_status;
+    }
+
 }
