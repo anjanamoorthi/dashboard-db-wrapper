@@ -35,6 +35,7 @@ public class TestcaseService {
         testcase.setSkip(Boolean.parseBoolean(""+ tcData.getSkip()));
         testcase.setRequirement(tcData.getRequirement());
         testcase.setDuration(tcData.getDuration());
+
         Importance importance = importanceService.findByName(tcData.getImportance());
         testcase.setImportance(importance);
         testcase = repo.save(testcase);
