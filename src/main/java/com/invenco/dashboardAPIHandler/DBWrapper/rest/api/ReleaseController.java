@@ -7,7 +7,6 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.api;
 
 import com.google.gson.*;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Release;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Release_DAO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ProductService;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.ReleaseService;
@@ -48,22 +47,6 @@ public class ReleaseController {
             return parser.parse(json.value());
         }
     }
-
-
-   /* @PostMapping
-    public ResponseEntity<String> saveReleaseData(@RequestBody String data) {
-        // JSONObject jobj = (JSONObject) new JSONParser().parse(data);
-        JsonElement jsonElem = new JsonParser().parse(data);
-        JsonObject jobj = jsonElem.getAsJsonObject();
-        String action = jobj.get("action").getAsString();
-        Release relData = gson.fromJson(jobj.get("release").toString(), Release.class);
-        if (action.equals("add") || action.equals("update")) {
-            return service.saveReleaseData(relData);
-        } else if (action.equals("delete")) {
-            return service.deleteReleaseData(relData);
-        }
-        return new ResponseEntity<>("Database Manipulation has failed", HttpStatus.BAD_REQUEST);
-    } */
 
 
     @PostMapping
