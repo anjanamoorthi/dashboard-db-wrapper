@@ -31,7 +31,7 @@ public class Releases extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "release_name")
+    @Column(name = "release_name", length = 20)
     private String name;
 
     @NotNull

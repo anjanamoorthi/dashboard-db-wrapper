@@ -10,13 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table( name = "invteststatus")
+@Table( name = "teststatus")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestStatus {
 
     @Id
-    @Column ( name = "TestStatusName")
+    @Column ( name = "TestStatusName", length = 20)
     public String testStatus;
 }

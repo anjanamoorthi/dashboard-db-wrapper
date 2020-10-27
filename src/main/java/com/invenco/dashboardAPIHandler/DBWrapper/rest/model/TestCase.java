@@ -13,6 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
@@ -22,18 +23,26 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TestCase {
+public class TestCase implements Serializable {
+
+//    Commenting this for now. Later will add uuid as the unique id to identify test cases
+//    @Id
+//    @GeneratedValue(generator = "hibernate-uuid")
+//    @GenericGenerator(name="hibernate-uuid", strategy = "uuid2")
+//    @Column(name = "test_id", columnDefinition = "BINARY(16)")
+//    private UUID uuid;
 
     @Id
-    @GeneratedValue(generator = "hibernate-uuid")
-    @GenericGenerator(name="hibernate-uuid", strategy = "uuid2")
-    @Column(name = "test_id", columnDefinition = "BINARY(16)")
-    private UUID uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "test_id")
+    private Long id;
 
-    @Column( name = "test_name")
+    @NotNull
+    @Column( name = "test_name", length = 100)
     private String name;
 
-    @Column ( name = "module")
+    @NotNull
+    @Column ( name = "module", length = 50)
     private String module;
 
     @NotNull
