@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table( name = "invreleasestatus")
+@Table( name = "release_status")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class ReleaseStatus {
 
     @JsonIgnore
     @OneToMany(mappedBy = "releasestatus", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Release> release;
+    private List<Releases> release_status;
 
     public ReleaseStatus(String rStatus) {
         this.releaseStatus = rStatus;

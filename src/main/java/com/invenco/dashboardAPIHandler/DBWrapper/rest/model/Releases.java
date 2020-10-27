@@ -6,6 +6,7 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.model;
 
+import com.invenco.dashboardAPIHandler.DBWrapper.BaseEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
@@ -16,32 +17,30 @@ import java.util.UUID;
 
 
 @Entity
-@Table ( name = "invreleasebundledata")
+@Table ( name = "releases",uniqueConstraints = @UniqueConstraint(columnNames = { "release_name", "release_iteration" }))
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Release {
+@EqualsAndHashCode(callSuper = true) // Required if we are extending BaseClass
+public class Releases extends BaseEntity {
 
-    @EmbeddedId
-    private ReleaseKey id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "release_id")
+    private Long id;
 
-//    @Id
-    @GeneratedValue(generator = "hibernate-uuid")
-    @GenericGenerator(name="hibernate-uuid", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID uuid;// = UUID.randomUUID();
+    @NotNull
+    @Column(name = "release_name")
+    private String name;
 
-//    @NotNull
-//    @Column(name = "releasename")
-//    public String releasename;
+    @NotNull
+    @Column(name = "release_iteration")
+    private int iteration;
 
     @Column(name = "description")
     public String description;
 
-//    @Column(name = "iteration")
-//    @ColumnDefault("1")
-//    public int iteration;
 
     @NotNull
     @Column(name = "startdate")
@@ -50,20 +49,14 @@ public class Release {
     @Column(name = "enddate")
     public String enddate;
 
-   // @Column(name = "status")
-    //public String status;
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "release_id")
+    @JoinColumn(name = "release_status_id")
     private ReleaseStatus releasestatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private Product productName;
-
-    @Column(name = "user")
-    public String user;
 
 }
 
