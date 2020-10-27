@@ -62,4 +62,8 @@ public class ReleaseService {
         return new ResponseEntity<>("Successfully deleted Entry from DB", HttpStatus.OK);
     }
 
+    public Releases findByNameAndIteration(String release_name, int release_iteration) {
+        return repo.findByNameAndIteration(release_name, release_iteration);
+    }
+
 }

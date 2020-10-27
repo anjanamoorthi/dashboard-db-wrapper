@@ -49,7 +49,7 @@ public class ReleaseController {
     }
 
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<String> saveReleaseData(@Valid @RequestBody Release_DAO releaseData) {
 
         try {
