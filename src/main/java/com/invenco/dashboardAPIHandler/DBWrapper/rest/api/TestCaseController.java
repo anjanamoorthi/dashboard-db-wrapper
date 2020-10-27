@@ -7,9 +7,8 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.api;
 
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.TestCase_DAO;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.TestResult_DAO;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.TestResult_DTO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.TestCase_DTO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.TestCaseService;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.service.TestResultService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,19 +22,19 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/test_result")
-public class TestResultController {
+@RequestMapping("/testcase")
+public class TestCaseController {
 
-    Logger logger = LogManager.getLogger(TestResultController.class);
+    Logger logger = LogManager.getLogger(TestCaseController.class);
 
     @Autowired
-    private TestResultService service;
+    private TestCaseService service;
 
     @PostMapping("/add")
-    public @ResponseBody HttpEntity<Object> saveTestResultData(@Valid @RequestBody TestResult_DAO data) {
-        TestResult_DTO dto;
+    public @ResponseBody HttpEntity<Object> saveTestcaseData(@Valid @RequestBody TestCase_DAO data) {
+        TestCase_DTO dto;
         try {
-            dto = service.saveTestResultData(data);
+            dto = service.saveTestcaseData(data);
 
         } catch (Exception e) {
             throw e;
@@ -44,10 +43,10 @@ public class TestResultController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public @ResponseBody HttpEntity<String> deleteTestResultData(@PathVariable Long id) {
-        TestResult_DTO dto;
+    public @ResponseBody HttpEntity<String> deleteTestCaseData(@Valid @PathVariable Long id) {
+        TestCase_DTO dto;
         try {
-            dto = service.deleteTestResultData(id);
+            dto = service.deleteTestcaseData(id);
             return new ResponseEntity(dto, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Failed to Delete test case entry from DB");
@@ -55,16 +54,5 @@ public class TestResultController {
         }
     }
 
-    @PatchMapping("/update")
-    public @ResponseBody HttpEntity<Object> updateTestResultData(@Valid @RequestBody TestResult_DAO data) {
-        TestResult_DTO dto;
-        try {
-            dto = service.updateTestResultData(data);
-
-        } catch (Exception e) {
-            throw e;
-        }
-        return new ResponseEntity<>(dto, HttpStatus.OK);
-    }
 
 }

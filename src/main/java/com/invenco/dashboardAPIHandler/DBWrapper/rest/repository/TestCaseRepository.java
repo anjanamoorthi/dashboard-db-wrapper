@@ -12,9 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.UUID;
 
-public interface TestcaseRepository extends JpaRepository<TestCase, UUID> {
+public interface TestCaseRepository extends JpaRepository<TestCase, Long> {
 
-    @Query(value = "SELECT * FROM testcase where test_name = ?1", nativeQuery = true)
-    TestCase findByName(String name);
-
+    @Query(value = "SELECT tc FROM TestCase tc where tc.name = ?1")
+    TestCase findByName(String testcaseName);
 }

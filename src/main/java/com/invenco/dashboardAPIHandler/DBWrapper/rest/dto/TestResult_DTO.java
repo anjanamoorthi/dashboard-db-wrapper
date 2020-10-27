@@ -1,6 +1,8 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sun.istack.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,12 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TestResult_DTO {
+
+
+	@NotNull
+	private Long id;
 
 	@NotNull
 	private String release_name;

@@ -22,11 +22,7 @@ public class TestStatus extends BaseEntity {
     @Column(name = "test_status_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "status", unique = true, length = 20)
     @NotNull
-    private String test_status;
-
-    public TestStatus(String test_status) {
-        this.test_status = test_status;
-    }
+    private String status;
 }

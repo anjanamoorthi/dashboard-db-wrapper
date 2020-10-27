@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-//@Repository
+@Repository
 public interface TestStatusRepository extends JpaRepository<TestStatus, Long> {
 
-	@Query(value = "SELECT * FROM testStatus where test_status = ?1", nativeQuery = true)
-	TestStatus findByName(String status);
+	@Query(value = "SELECT ts FROM TestStatus ts where ts.status = ?1")
+	TestStatus findByValue(String status);
 }

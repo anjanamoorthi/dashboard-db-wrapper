@@ -1,9 +1,20 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.model;
 
-import com.invenco.dashboardAPIHandler.DBWrapper.BaseEntity;
-import lombok.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
-import javax.persistence.*;
+import com.invenco.dashboardAPIHandler.DBWrapper.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -17,10 +28,12 @@ public class TestResult extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "release_id", referencedColumnName = "release_id", insertable = true, updatable = true)
 	private Releases release;
 
+	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "test_id", referencedColumnName = "test_id", insertable = true, updatable = true)
 	private TestCase testcase_name;
@@ -28,10 +41,11 @@ public class TestResult extends BaseEntity {
 	private String test_module;
 	
 	private int test_duration;
-	
+
+	@NotNull
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "test_status_id", referencedColumnName = "test_status_id", insertable = true, updatable = true)
-	private TestStatus status;
+	private TestStatus test_status;
 	
 	private String test_starttime;
 	private String test_finishtime;

@@ -25,12 +25,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TestCase implements Serializable {
 
-//    Commenting this for now. Later will add uuid as the unique id to identify test cases
 //    @Id
 //    @GeneratedValue(generator = "hibernate-uuid")
 //    @GenericGenerator(name="hibernate-uuid", strategy = "uuid2")
 //    @Column(name = "test_id", columnDefinition = "BINARY(16)")
-//    private UUID uuid;
+//    private UUID id;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,7 +61,7 @@ public class TestCase implements Serializable {
     @Column ( name = "requirement")
     private String requirement;
 
-    @Column ( name = "duration")
-    private Integer duration;
+    @Column ( name = "expected_duration")
+    private Integer expectedDuration;
 
 }

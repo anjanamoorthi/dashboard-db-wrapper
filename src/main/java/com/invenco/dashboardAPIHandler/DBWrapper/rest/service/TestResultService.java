@@ -1,94 +1,84 @@
+/**
+ * @author Moorthi Rajan
+ * @version 0.0.1
+ * @since 03/10/2020
+ */
+
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.service;
 
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.TestResult_DAO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.TestResult_DTO;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Releases;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestCase;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestResult;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestStatus;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.*;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestResultRepository;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestcaseRepository;
-import com.netflix.discovery.converters.Auto;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.ParseException;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class TestResultService {
 
-	@Autowired
-	TestResultRepository testResultRepository;
+    @Autowired
+    private TestResultRepository repo;
 
-	@Autowired
-	TestcaseRepository tcRepo;
+    @Autowired
+    private ReleaseService releaseService;
 
-	@Autowired
-	TestcaseService testCaseService;
+    @Autowired
+    private TestStatusService testStatusService;
 
-	@Autowired
-	TestStatusService testStatusService;
+    @Autowired
+    private TestCaseService testCaseService;
 
-	@Autowired
-	ReleaseService releaseService;
+    @Autowired
+    private TestResultService testResultService;
 
-	@Autowired
-	TestResultService testResultService;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	@Autowired
-	private ModelMapper modelMapper;
+    public TestResult_DTO saveTestResultData(TestResult_DAO trData) {
+        System.out.println("Saving data into DB");
+        TestResult testresult = modelMapper.map(trData, TestResult.class);
 
-	public TestResult_DTO saveData(TestResult_DTO testResult_dto)  {
+        Releases release = releaseService.findByNameAndIteration(trData.getRelease(),
+                trData.getRelease_iteration());
+        testresult.setRelease(release);
 
-		TestResult result = convertToEntity(testResult_dto);
-		// Store result
-		TestResult testResult = testResultService.save(result);
-		return convertToDto(testResult);
-	}
+        TestStatus status = testStatusService.findByValue(trData.getResult());
+        testresult.setTest_status(status);
+
+        TestCase testcase = testCaseService.findByName(trData.getTestcase_name());
+        testresult.setTestcase_name(testcase);
+
+        testresult = repo.save(testresult);
+        TestResult_DTO response = modelMapper.map(testresult, TestResult_DTO.class);
+        return response;
+    }
+
+    @Transactional
+    public TestResult_DTO updateTestResultData(TestResult_DAO trData) {
+        System.out.println("Update Test Result : [TEST CASE] "+ trData.getTestcase_name() + "[STATUS] " + trData.getResult());
+
+        Optional<TestResult> testresult = repo.findById(trData.getId());
+        testresult.ifPresent(result ->
+                {
+                    TestStatus status = testStatusService.findByValue(trData.getResult());
+                    result.setTest_status(status);
+                }
+        );
+
+        TestResult_DTO response = modelMapper.map(testresult, TestResult_DTO.class);
+        return response;
+    }
 
 
-	private TestResult_DTO convertToDto(TestResult testResult) {
-		TestResult_DTO testResult_dto = modelMapper.map(testResult, TestResult_DTO.class);
-		testResult_dto.setTestcase_name(testResult.getTestcase_name().getName());
-		testResult_dto.setTest_status(testResult.getStatus().getTest_status());
-		return testResult_dto;
-	}
-
-	private TestResult convertToEntity(TestResult_DTO testResult_dto) throws ParseException {
-		TestResult testResult = modelMapper.map(testResult_dto, TestResult.class);
-
-		// Find release with same name and iteration
-		Releases release = releaseService.findByNameAndIteration(testResult_dto.getRelease_name(),
-				testResult_dto.getRelease_iteration());
-		testResult.setRelease(release);
-
-		// Find result with same name
-		TestCase testcase = testCaseService.findByName(testResult_dto.getTestcase_name());
-		testResult.setTestcase_name(testcase);
-
-		// Find status with same name
-		TestStatus testStatus = testStatusService.findByName(testResult_dto.getTest_status());
-		testResult.setStatus(testStatus);
-
-		return testResult;
-	}
-
-	
-	public TestResult save(TestResult testResult) {
-		testResultRepository.save(testResult);
-		return testResult;
-	}
-
-	public List<TestResult> list() {
-		return testResultRepository.findAll();
-	}
-
-	public Optional<TestResult> findByID(Long id) {
-		return testResultRepository.findById(id);
-	}
+    public TestResult_DTO deleteTestResultData(Long id) {
+        TestResult_DTO response = new TestResult_DTO();
+        repo.deleteById(id);
+        response.setId(id);
+        return response;
+    }
 
 }

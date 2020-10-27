@@ -6,11 +6,11 @@
 
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.service;
 
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Test_DAO;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.Test_DTO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.TestCase_DAO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.TestCase_DTO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Importance;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.TestCase;
-import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestcaseRepository;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.repository.TestCaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class TestcaseService {
+public class TestCaseService {
 
     @Autowired
-    private TestcaseRepository repo;
+    private TestCaseRepository repo;
 
     @Autowired
     private ImportanceService importanceService;
@@ -30,38 +30,30 @@ public class TestcaseService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public Test_DTO saveTestcaseData(Test_DAO tcData) {
+    public TestCase_DTO saveTestcaseData(TestCase_DAO tcData) {
         System.out.println("Saving data into DB");
         TestCase testcase = modelMapper.map(tcData, TestCase.class);
-       // TestCase testcase = new TestCase();
-//        testcase.setName(tcData.getName());
-//        testcase.setModule(tcData.getModule());
-//        testcase.setTestplan(tcData.getTestplan());
-//        testcase.setKtf(Boolean.parseBoolean(""+ tcData.getKtf()));
-//        testcase.setSkip(Boolean.parseBoolean(""+ tcData.getSkip()));
-//        testcase.setRequirement(tcData.getRequirement());
-//        testcase.setDuration(tcData.getDuration());
-
         Importance importance = importanceService.findByName(tcData.getImportance());
         testcase.setImportance(importance);
         testcase = repo.save(testcase);
 
-        Test_DTO response = new Test_DTO();
+        TestCase_DTO response = new TestCase_DTO();
         response.setId(testcase.getId());
         return response;
     }
 
-    public String deleteTestcaseData(UUID uuid) {
-        repo.deleteById(uuid);
-        return uuid.toString();
+    public TestCase_DTO deleteTestcaseData(Long id) {
+        TestCase_DTO response = new TestCase_DTO();
+        repo.deleteById(id);
+        response.setId(id);
+        return response;
     }
 
+    public TestCase findByName(String testcaseName) {
+        return repo.findByName(testcaseName);
+    }
     public List<TestCase> list() {
         return repo.findAll();
-    }
-
-    public TestCase findByName(String name) {
-        return repo.findByName(name);
     }
 
 }
