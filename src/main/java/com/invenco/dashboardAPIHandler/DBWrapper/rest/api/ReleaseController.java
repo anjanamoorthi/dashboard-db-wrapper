@@ -58,7 +58,7 @@ public class ReleaseController {
         try {
             releaseDto = service.saveReleaseData(releaseData);
         } catch (Exception e) {
-            return new ResponseEntity<>("Invalid DB Operation", HttpStatus.BAD_REQUEST);
+            throw e;
         }
         return new ResponseEntity<>(releaseDto, HttpStatus.OK);
     }
