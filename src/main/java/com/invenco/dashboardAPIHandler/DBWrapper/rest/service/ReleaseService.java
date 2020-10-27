@@ -7,6 +7,7 @@
 package com.invenco.dashboardAPIHandler.DBWrapper.rest.service;
 
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.dao.Release_DAO;
+import com.invenco.dashboardAPIHandler.DBWrapper.rest.dto.Release_DTO;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Product;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.ReleaseKey;
 import com.invenco.dashboardAPIHandler.DBWrapper.rest.model.Releases;
@@ -16,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import javax.validation.constraints.Null;
+import org.modelmapper.ModelMapper;
 
 
 @Service
@@ -42,19 +42,22 @@ public class ReleaseService {
     @Autowired
     private ReleaseStatusService releaseStatusService;
 
-    public Releases saveReleaseData(Release_DAO rdata) {
+    @Autowired
+    private ModelMapper modelMapper;
+
+
+    public Release_DTO saveReleaseData(Release_DAO rdata) {
         System.out.println("Saving data into DB");
-        Releases releaseData = new Releases();
-        releaseData.setDescription(rdata.description);
-        releaseData.setStartdate(rdata.startdate);
-        releaseData.setEnddate(rdata.enddate);
-        releaseData.setName(rdata.releasename);
-        releaseData.setIteration(rdata.iteration);
-        releaseData.setProductName(prodService.findByName(rdata.pname));
-        releaseData.setReleasestatus(releaseStatusService.findByName(rdata.status));
-        System.out.println(releaseData.getReleasestatus());
-        return repo.save(releaseData);
-        //return new ResponseEntity<>("Successfully saved", HttpStatus.OK);
+        Releases releaseData = modelMapper.map(rdata, Releases.class);
+        releaseData.setProduct_name(prodService.findByName(rdata.getProduct_name()));
+        releaseData.setRelease_status(releaseStatusService.findByName(rdata.getRelease_status()));
+        releaseData = repo.save(releaseData);
+
+        Release_DTO response = new Release_DTO();
+        response.setId(releaseData.getId());
+        response.setIteration(releaseData.getIteration());
+        return response;
+
     }
 
     public ResponseEntity<String> deleteReleaseData(Releases relData) {

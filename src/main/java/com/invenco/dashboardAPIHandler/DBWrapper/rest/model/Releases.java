@@ -13,7 +13,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.UUID;
+
+import static java.util.Calendar.DATE;
 
 
 @Entity
@@ -39,24 +42,25 @@ public class Releases extends BaseEntity {
     private int iteration;
 
     @Column(name = "description")
-    public String description;
+    private String description;
 
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "start_date")
+    private Date start_date;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "end_date")
+    private Date end_date;
 
     @NotNull
-    @Column(name = "startdate")
-    public String startdate;
-
-    @Column(name = "enddate")
-    public String enddate;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "release_status_id")
-    private ReleaseStatus releasestatus;
+    @ManyToOne(fetch = FetchType.LAZY )
+    @JoinColumn(name = "release_status_id", referencedColumnName = "release_status_id", insertable = true, updatable = true)
+    private ReleaseStatus release_status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
-    private Product productName;
+    private Product product_name;
 
 }
 

@@ -21,9 +21,9 @@ public class Product {
     @Column( name = "ProductName")
     private String productName;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "productName", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Releases> product;
+   // @JsonIgnore
+    //@OneToMany(mappedBy = "productName", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Releases> product;
 
 
     public Product(String pName) {
